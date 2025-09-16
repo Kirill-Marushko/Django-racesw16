@@ -3,7 +3,7 @@ version: '3.9'
 services:
   web:
     build: .
-    container_name: myproject_web
+    container_name: Django_races_web
     restart: always
     command: gunicorn Django_races.wsgi:application --bind 0.0.0.0:8000
     volumes:
