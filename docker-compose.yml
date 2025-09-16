@@ -21,18 +21,6 @@ services:
       - proxy_net
       - default
 
-  db:
-    image: postgres:15
-    container_name: myproject_db
-    restart: always
-    environment:
-      POSTGRES_DB: myproject4
-      POSTGRES_USER: myprojectuser4
-      POSTGRES_PASSWORD: mysecretpassword4
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - default
 
 volumes:
   postgres_data:
