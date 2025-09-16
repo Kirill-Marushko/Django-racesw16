@@ -14,8 +14,7 @@ venv/
 *.env
 
 # Django
-media/
-staticfiles/
+
 
 # Migrations (залишати, якщо потрібно)
 */migrations/__pycache__/
