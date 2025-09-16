@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    container_name: myproject_web
+    restart: always
+    command: gunicorn Django_races.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - ./staticfiles:/app/staticfiles
+    expose:
+      - "8000"
+    environment:
+      - VIRTUAL_HOST=races-f1.pp.ua
+      - LETSENCRYPT_HOST=races-f1.pp.ua
+      - LETSENCRYPT_EMAIL=k.v.marushko2001@gmail.com
+    depends_on:
+      - db
+    networks:
+      - proxy_net
+      - default
+
+  db:
+    image: postgres:15
+    container_name: myproject_db
+    restart: always
+    environment:
+      POSTGRES_DB: myproject4
+      POSTGRES_USER: myprojectuser4
+      POSTGRES_PASSWORD: mysecretpassword4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default
+
+volumes:
+  postgres_data:
+
+networks:
+  proxy_net:
+    external: true

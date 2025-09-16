@@ -1,0 +1,23 @@
+<!-- templates/partials/header.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 fixed-top">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fs-4 fw-bold text-primary" href="/">🏎️ RaceZone</a>
+
+        <div class="ms-auto d-flex align-items-center gap-3">
+            {% if request.user.is_authenticated %}
+            {% if request.user.profile_image %}
+            <img src="{{ request.user.profile_image.url }}" alt="Фото" width="40" height="40" class="rounded-circle"
+                 style="object-fit: cover;">
+            {% endif %}
+            <span class="text-dark fw-semibold">Привіт, {{ request.user.username }}!</span>
+            <span class="text-muted">Баланс: {{ request.user.balance }} ₴</span>
+
+            <a href="{% url 'profile' %}" class="btn btn-outline-dark">👤 Профіль</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger">🚪 Вийти</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-primary">🔐 Вхід</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-success">📝 Реєстрація</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,48 @@
+.racer {
+    color:navy;
+    background-color:#4682B4
+}
+h1 {
+    text-align:center
+}
+
+.cars {
+    font-size:25px
+}
+
+.racers {
+    background-color:#4682B4
+}
+
+.routes {
+    text-align:center
+}
+
+.picture {
+    width:300px;
+    height:300px
+}
+
+.rates {
+    margin:50px;
+}
+
+.main {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: space-around;
+    background-color: #333;
+    padding: 10px;
+}
+
+.main a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+}
+
+.main a:hover {
+    background-color: #ddd;
+    color: black;
+}

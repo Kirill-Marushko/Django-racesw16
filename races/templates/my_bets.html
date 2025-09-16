@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мої ставки</title>
+</head>
+<body>
+<h2>💸 Мої ставки</h2>
+<a href="{% url 'profile' %}">← Назад до профілю</a>
+
+{% if bets %}
+<ul>
+    {% for bet in bets %}
+    <li>
+        <strong>{{ bet.race.track.name }}</strong> — {{ bet.race.date_time|date:"Y-m-d H:i" }}<br>
+        Гонщик: {{ bet.driver.first_name }} {{ bet.driver.last_name }}<br>
+        Ставка: {{ bet.amount }} грн ({{ bet.placed_at|date:"Y-m-d H:i" }})
+    </li>
+    <hr>
+    {% endfor %}
+</ul>
+{% else %}
+<p>У вас ще немає ставок.</p>
+{% endif %}
+</body>
+</html>

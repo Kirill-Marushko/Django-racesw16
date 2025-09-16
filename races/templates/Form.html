@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/submit" method="POST">
+  <label>Имя:
+    <input type="text" name="username">
+  </label>
+  <br>
+  <label>Email:
+    <input type="email" name="email">
+  </label>
+  <br>
+  <button type="submit">Отправить</button>
+    <label>Пол:
+    <input type="checkbox" name="gender" value="male"> Мужской
+    <input type="checkbox" name="gender" value="female"> Женский
+  </label><br>
+  <br>
+
+  <label>Выберите страну:
+    <select name="country">
+      <option value="ua">Україна</option>
+      <option value="us">США</option>
+      <option value="de">Германия</option>
+    </select>
+  </label><br>
+  <input type="number" min="3" max="10" required>
+    </form>
+
+</body>
+</html>

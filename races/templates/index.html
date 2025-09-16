@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Головна - Гран-прі</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f8;
+        }
+
+        .main-header {
+            background-color: #AFEEEE;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .gif-image {
+            max-width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+        }
+
+        .nav-btns a {
+            margin: 5px;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-4">
+
+    <!-- 🔝 Верхній бар -->
+    <div class="top-bar">
+        <div></div> <!-- Порожній блок зліва для вирівнювання -->
+        <div class="user-actions">
+            {% if user.is_authenticated %}
+            {% if user.profile_image %}
+            <img src="{{ user.profile_image.url }}" alt="Фото" class="profile-img">
+            {% endif %}
+            <a href="{% url 'profile' %}" class="btn btn-outline-dark">👤 Профіль</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger">🚪 Вийти</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-primary">🔐 Вхід</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-success">📝 Реєстрація</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 🔹 Привітання -->
+    <div class="main-header text-center">
+        <h1 class="display-4">🏁 Вітаємо на порталі Grand Prix!</h1>
+        <p class="lead">Це гоночний портал, де ви можете переглядати гонки, робити ставки та слідкувати за своїми
+            улюбленими гонщиками та машинами!</p>
+    </div>
+
+    <!-- 🔸 Навігація -->
+    <div class="text-center mb-4 nav-btns">
+        <a href="{% url 'cars' %}" class="btn btn-primary">🚗 Автомобілі</a>
+        <a href="{% url 'racers' %}" class="btn btn-primary">🏎️ Гонщики</a>
+        <a href="{% url 'routes' %}" class="btn btn-primary">🗺️ Траси</a>
+        <a href="{% url 'races' %}" class="btn btn-primary">📅 Гонки</a>
+    </div>
+
+    <!-- 🔸 GIF -->
+    <div class="text-center">
+        <img src="{% static 'imgs/Gif main.gif' %}" alt="Гонки" class="gif-image rounded shadow-sm">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

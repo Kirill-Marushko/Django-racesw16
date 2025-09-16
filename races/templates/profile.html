@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Профіль користувача</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f8;
+            padding-top: 80px;
+        }
+        .profile-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 0 0 10px 10px;
+        }
+        .profile-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+        }
+        .card-custom {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .btn-custom {
+            margin-right: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+    <script>
+        function toggleForm() {
+            document.getElementById('editForm').classList.toggle('hidden');
+        }
+
+        function toggleBets() {
+            document.getElementById('betsList').classList.toggle('hidden');
+        }
+
+        function toggleForm() {
+            const form = document.getElementById('editForm');
+            form.classList.toggle('hidden');
+        }
+
+        function toggleBets() {
+            const bets = document.getElementById('betsList');
+            bets.classList.toggle('hidden');
+        }
+    </script>
+</head>
+<body>
+
+{% include "partials/header.html" %}
+
+<!-- 🔹 Шапка профілю -->
+<div class="profile-header d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+        {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="Фото профілю" class="profile-image">
+        {% endif %}
+        <div>
+            <h5 class="mb-0">{{ user.username }}</h5>
+            <small>Баланс: <strong>{{ user.balance }} грн</strong></small>
+        </div>
+    </div>
+    <div>
+        <a href="{% url 'races' %}" class="text-white me-3 text-decoration-none">🏁 Гонки</a>
+        <a href="/logout/" class="text-white text-decoration-none">🚪 Вийти</a>
+    </div>
+</div>
+
+<!-- 🔹 Кнопки -->
+<div class="mt-3 ms-3 mb-4">
+    <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-primary" onclick="toggleForm()">✏️ Редагувати профіль</button>
+        <button class="btn btn-info text-white" onclick="toggleBets()">💸 Мої ставки</button>
+        <a href="{% url 'top_up_balance' %}" class="btn btn-success">💰 Поповнити рахунок</a>
+    </div>
+</div>
+
+<!-- 🔹 Контейнер для карточек -->
+<div class="row ms-3 me-3">
+    <!-- 🔹 Редагування профілю -->
+    <div id="editForm" class="col-md-6 mb-4 hidden">
+        <div class="card p-4 shadow-sm">
+            <h5 class="mb-3">Редагування профілю</h5>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.profile_image.label_tag }}
+                    {{ form.profile_image }}
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">💾 Зберегти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🔹 Список ставок -->
+    <div id="betsList" class="col-md-8 mb-4 hidden">
+    <div class="card p-4 shadow-sm">
+        <h2 class="mb-4">🎲 Мої ставки</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="table-secondary">
+            <tr>
+                <th>Гонка</th>
+                <th>Гонщик</th>
+                <th>Сума</th>
+                <th>Час</th>
+                <th>Статус</th>
+                <th>Виграш</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for bet in bets %}
+            <tr>
+                <td>{{ bet.race.title }}</td>
+                <td>{{ bet.driver.name }}</td>
+                <td>{{ bet.amount }} ₴</td>
+                <td>{{ bet.placed_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    {% if bet.race.is_finished %}
+                    {% if bet.is_win %}<span class="text-success">Виграв</span>
+                    {% else %}<span class="text-danger">Програв</span>{% endif %}
+                    {% else %}
+                    <span class="text-warning">Очікується</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if bet.is_win %}{{ bet.amount}} ₴{% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">У вас ще немає ставок.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Профіль користувача</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--        }-->
+
+<!--        header {-->
+<!--            background-color: #2c3e50;-->
+<!--            color: white;-->
+<!--            padding: 20px;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: space-between;-->
+<!--        }-->
+
+<!--        .user-info {-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            gap: 15px;-->
+<!--        }-->
+
+<!--        img.profile {-->
+<!--            width: 60px;-->
+<!--            height: 60px;-->
+<!--            border-radius: 50%;-->
+<!--            object-fit: cover;-->
+<!--            border: 2px solid #fff;-->
+<!--        }-->
+
+<!--        .buttons {-->
+<!--            margin: 20px 0;-->
+<!--        }-->
+
+<!--        .buttons button {-->
+<!--            padding: 10px 15px;-->
+<!--            margin-right: 10px;-->
+<!--            background-color: #3498db;-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .hidden {-->
+<!--            display: none;-->
+<!--        }-->
+
+<!--        .form-group {-->
+<!--            margin-bottom: 15px;-->
+<!--        }-->
+
+<!--        form {-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+
+<!--        ul {-->
+<!--            list-style-type: none;-->
+<!--            padding-left: 0;-->
+<!--        }-->
+
+<!--        li {-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+
+<!--        hr {-->
+<!--            margin: 10px 0;-->
+<!--        }-->
+<!--    </style>-->
+<!--    <script>-->
+<!--        function toggleForm() {-->
+<!--            const form = document.getElementById('editForm');-->
+<!--            form.classList.toggle('hidden');-->
+<!--        }-->
+
+<!--        function toggleBets() {-->
+<!--            const bets = document.getElementById('betsList');-->
+<!--            bets.classList.toggle('hidden');-->
+<!--        }-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--&lt;!&ndash; 🔹 Шапка з профілем &ndash;&gt;-->
+<!--<header>-->
+<!--    <div class="user-info">-->
+<!--        {% if user.profile_image %}-->
+<!--        <img src="{{ user.profile_image.url }}" alt="Фото профілю" class="profile">-->
+<!--        {% endif %}-->
+<!--        <div>-->
+<!--            <strong>{{ user.username }}</strong><br>-->
+<!--            Баланс: <strong>{{ user.balance }} грн</strong>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <a href="{% url 'races' %}" style="color: white; text-decoration: none; margin-right: 15px;">🏁 Гонки</a>-->
+<!--        <a href="/logout/" style="color: white; text-decoration: none;">🚪 Вийти</a>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--&lt;!&ndash; 🔹 Кнопки &ndash;&gt;-->
+<!--<div class="buttons">-->
+<!--    <button onclick="toggleForm()">✏️ Редагувати профіль</button>-->
+<!--    <button onclick="toggleBets()">💸 Мої ставки</button>-->
+<!--    <a href="{% url 'top_up_balance' %}" class="btn btn-outline-success">💰 Поповнити рахунок</a>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash; 🔹 Форма редагування профілю &ndash;&gt;-->
+<!--<div id="editForm" class="hidden">-->
+<!--    <form method="post" enctype="multipart/form-data">-->
+<!--        {% csrf_token %}-->
+<!--        <div class="form-group">-->
+<!--            {{ form.username.label_tag }}<br>-->
+<!--            {{ form.username }}-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            {{ form.profile_image.label_tag }}<br>-->
+<!--            {{ form.profile_image }}-->
+<!--        </div>-->
+<!--        <button type="submit">💾 Зберегти</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; 🔹 Список ставок &ndash;&gt;-->
+<!--<div id="betsList" class="hidden">-->
+<!--    <h3>Ваші ставки:</h3>-->
+<!--    {% if bets %}-->
+<!--    <ul>-->
+<!--        {% for bet in bets %}-->
+<!--        <li>-->
+<!--            <strong>{{ bet.race.title }}</strong> — {{ bet.race.date_time|date:"Y-m-d H:i" }}<br>-->
+<!--            Гонщик: {{ bet.driver.name }}<br>-->
+<!--            Ставка: {{ bet.amount }} грн-->
+<!--        </li>-->
+<!--        <hr>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+<!--    {% else %}-->
+<!--    <p>У вас ще немає ставок.</p>-->
+<!--    {% endif %}-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+

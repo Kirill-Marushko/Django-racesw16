@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+<head>
+    <title>Список гонок</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'styles/style.css'%}">
+    <style>
+        body {
+            background-color: #f0f4f8;
+            padding-top: 80px;
+            font-size: 1.15rem;
+        }
+
+        .card {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-blur-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(15px);
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .car-img {
+            max-height: 100px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .list-group-item {
+            font-size: 1.1rem;
+            background-color: transparent;
+            border: none;
+        }
+
+        .btn {
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+         .icon-img {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+        transition: transform 0.2s ease;
+        border-radius: 4px;
+    }
+
+    .icon-img:hover {
+        transform: scale(1.3);
+        z-index: 2;
+    }
+    </style>
+</head>
+<body class="bg-light">
+
+{% include "partials/header.html" %}
+
+<h1>Список гонок</h1>
+<div class="container my-5">
+
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for item in races_data %}
+        {% if not item.race.is_finished %}
+        <div class="col">
+            <div class="card h-100 shadow-sm position-relative overflow-hidden">
+
+                <div class="card-content p-3 d-flex flex-column justify-content-between h-100">
+                    <div class="mb-3 text-center">
+                        <h5 class="card-title fw-bold text-primary">{{ item.race.title }}</h5>
+                        <div class="text-muted">
+                            <small><strong>Дата:</strong> {{ item.race.date_time|date:"Y-m-d" }}</small><br>
+                            <small><strong>Час:</strong> {{ item.race.date_time|time:"H:i" }}</small><br>
+                        </div>
+
+                        <!-- Таймер -->
+                        <div class="text-dark fw-semibold mt-2">
+                            ⏳ До початку:
+                            <div id="timer-{{ item.race.id }}" class="text-danger fs-5">Завантаження...</div>
+                        </div>
+                    </div>
+
+                    <ul class="list-group list-group-flush mb-3">
+                        {% for entry in item.entries %}
+                        <li class="list-group-item d-flex align-items-center gap-2">
+                            <img src="{{ entry.driver.img.url }}" alt="Driver" style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
+                            <span>{{ entry.driver.name }}</span> —
+                            <img src="{{ entry.car.img.url }}" alt="Car" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
+                            <span>{{ entry.car.title }}</span>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">Немає учасників</li>
+                        {% endfor %}
+                    </ul>
+
+                    <a href="/race/?id={{ item.race.id }}" class="btn btn-outline-dark w-100">Детальніше</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript для таймера -->
+        <script>
+            const countdown{{ item.race.id }} = () => {
+                const endTime = new Date("{{ item.race.date_time|date:'Y-m-d H:i:s' }}").getTime();
+                const now = new Date().getTime();
+                const distance = endTime - now;
+
+                const timerEl = document.getElementById("timer-{{ item.race.id }}");
+
+                if (distance < 0) {
+                    timerEl.innerText = "Гонка вже розпочалась!";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerEl.innerText = `${days}д : ${hours}г : ${minutes}хв : ${seconds}с`;
+            };
+
+            setInterval(countdown{{ item.race.id }}, 1000);
+            countdown{{ item.race.id }}(); // запуск одразу
+        </script>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary fs-5 px-4 py-2">⬅️ Назад на головну</a>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!--{% for item in races_data %}-->
+<!--<div class="race">-->
+<!--    <h3>{{ item.race.title }} ({{ item.race.date_time|date:"Y-m-d H:i" }})</h3>-->
+<!--    <div class="drivers">-->
+<!--        <strong>Гонщики:</strong>-->
+<!--        <ul>-->
+<!--            {%for entry in item.entries%}-->
+<!--            <li>{{ entry.driver.name }} — {{ entry.car.title }}</li>-->
+<!--            {% empty %}-->
+<!--            <li>Немає учасників</li>-->
+<!--            {% endfor %}-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <a href="/race/?id={{item.race.id}}">-->
+<!--            <button>Детальніше</button>-->
+<!--        </a>-->
+<!--    </div>-->
+<!--</div>-->
+<!--{% endfor %}-->
+
+<!--<div class="text-center mt-4">-->
+<!--    <a href="/" class="btn btn-primary">Back to main</a>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

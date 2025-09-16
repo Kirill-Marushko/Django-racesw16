@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rates</title>
+</head>
+<body>
+    <form action="/submit" method="POST">
+    <div class="rates">
+        <label>Выберите гоншика:
+            <select name="country" required>
+                <option value="MV">Max Verstappen</option>
+                <option value="LN">Lando Norris</option>
+                <option value="LH">Lewis Hamilton</option>
+                <option value="FA">Fernando Alonso</option>
+                <option value="OP">Oscar Piastri</option>
+        </select>
+    </label>
+    </div>
+    <br>
+    <div class="rates">
+        <label> Введите email:
+            <input type="email" name="email" required>
+        </label>
+    </div>
+    <br>
+    <div class="rates">
+        <label> Укажите ставку:
+            <input type="number" min="5" max="100" required>
+            <span>$</span>
+        </label>
+    </div>
+    <br>
+    <div>
+        <button type="submit">Отправить</button>
+    </div>
+    </form>
+    <br>
+    <a href="file:///C:/Users/k.v.marushko/PycharmProjects/PythonProject3/main.html" class="rates">Back to main</a>
+</body>
+</html>
