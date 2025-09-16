@@ -15,15 +15,9 @@ services:
       - VIRTUAL_HOST=races-f1.pp.ua
       - LETSENCRYPT_HOST=races-f1.pp.ua
       - LETSENCRYPT_EMAIL=k.v.marushko2001@gmail.com
-    depends_on:
-      - db
     networks:
       - proxy_net
       - default
-
-
-volumes:
-  postgres_data:
 
 networks:
   proxy_net:
