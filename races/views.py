@@ -1,5 +1,5 @@
 from django.contrib import messages
-
+from django.urls import reverse_lazy
 from .models import Car, Racer, Route, Race, RaceEntry, Bet, process_race_results
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect, get_object_or_404
@@ -90,7 +90,7 @@ def races_view(request):
     return render(request, 'races_list.html', {'races_data': races_data})
 
 
-@login_required
+@login_required(login_url=reverse_lazy("login"))
 def place_bet_view(request, race_id):
     race = get_object_or_404(Race, id=race_id)
 
