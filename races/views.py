@@ -21,7 +21,7 @@ def home(request):
 
 def racers(request):
     racers_lst = Racer.objects.all()
-    return render(request, "racers.html", {"request": request, "racers_lst": racers_lst})
+    return render(request, "Racers.html", {"request": request, "racers_lst": racers_lst})
 
 
 def cars(request):
