@@ -177,3 +177,9 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "fas fa-folder-open",
     "default_icon_children": "fas fa-circle",
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://races-f1.pp.ua",
+    # якщо є www-версія, то теж
+    "https://www.races-f1.pp.ua",
+]
